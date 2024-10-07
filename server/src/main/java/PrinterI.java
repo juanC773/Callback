@@ -84,10 +84,12 @@ public class PrinterI implements Demo.Printer
             System.out.println("Latency process: "+latency);
             System.out.println();
             
+
+            
             //Usar callbck cuando este la respuesta
             callback.reportResponse(new Response(0, "Server response: " + s,quantityOfRequestServer));
 
-            
+            return;
 
 
            
@@ -127,7 +129,10 @@ public class PrinterI implements Demo.Printer
         long quantityOfRequestServer=processedRequestCount.get()+failedRequestCount.get();
 
         System.out.println("Latency process: "+latency);
+      
         callback.reportResponse(new Response(0, "Server response: " + s,quantityOfRequestServer));
+
+        return;
     }
 
 

@@ -10,10 +10,10 @@ public class MonitorClient {
         scheduler.scheduleAtFixedRate(() -> {
             long count = Client.getMissedRequest();
 
-            // System.out.println("=====Miss rate====");
-            // System.out.println("Miss Rate: " + count + " requests in the last minute");
-            // System.out.println("====================");
-            // System.out.println();
+             System.out.println("=====Miss rate====");
+             System.out.println("Miss Rate: " + count + " requests in the last minute");
+             System.out.println("====================");
+             System.out.println();
 
             // Resetear contadores
             Client.resetMissRequest();

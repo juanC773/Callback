@@ -87,18 +87,22 @@ public class Client {
                 service.printString(user + message,callbackPrx);
                 
 
+                MyCallback myCallback = new MyCallback();
 
+                
+                Response response2= myCallback.getActualResponse();
                
-
+                if(response2!=null){
+                    
                  //Calcular y mostrar la diferencia entre solicitudes enviadas y atendidas
-                //long quantityOfRequestServer = response.quantityOfRequestServer;
-                //long sentRequests = sentRequestCount.get();
-                //long missedRequestww = sentRequests - quantityOfRequestServer;
+                long quantityOfRequestServer = response2.quantityOfRequestServer;
+                long sentRequests = sentRequestCount.get();
+                long missedRequestww = sentRequests - quantityOfRequestServer;
                 
                 
 
-              //  missedRequest.set(missedRequestww);
-
+                 missedRequest.set(missedRequestww);
+                }    
              
             }
         }
