@@ -8,11 +8,11 @@ import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicLong;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.zeroc.Ice.Current;
+
 
 public class PrinterI implements Demo.Printer
 {
@@ -34,106 +34,101 @@ public class PrinterI implements Demo.Printer
     private static final AtomicLong failedRequestCount = new AtomicLong(0);
 
 
+    // Lista para almacenar los hostnames
+    private static final ArrayList<String> userList = new ArrayList<>();
 
-    public void printString(String s, CallbackPrx callback,com.zeroc.Ice.Current current)
-    {
-        long startTime=System.nanoTime();
 
+
+    public void printString(String s, CallbackPrx callback, com.zeroc.Ice.Current current) {
+        long startTime = System.nanoTime();
+    
         // Incrementar el contador de solicitudes
         requestCount.incrementAndGet();
-
+    
         System.out.println(s);
-
+    
         String[] input = s.split(" ");
-
         String user = input[0];
         int number;
+    
+        try {
 
-        try{
-            number = Integer.parseInt(input[1]);
-            //return new Response(0, user + "\nFibonacci: " + fibonacci(number) + "\nPrime factors: " + primeFactor(number));
-            System.out.println(user + "\nFibonacci: " + fibonacci(number) + "\nPrime factors: " + primeFactor(number));
-
-            long endtime=System.nanoTime();
-            long latency= endtime-startTime;
-
+            //Registrar usuario si no es el comando "list clients"
+            if (!s.contains("list clients")) {
+                // Almacenar el nombre de usuario en la lista si no está ya registrado
+                if (!userList.contains(user)) {
+                    userList.add(user);
+                }
 
 
-              // Guardar la latencia y calcular jitter
-              if (!latencyList.isEmpty()) {
-                long previousLatency = latencyList.get(latencyList.size() - 1);
-                long jitter = Math.abs(latency - previousLatency);
-                jitterList.add(jitter);
+    
+                number = Integer.parseInt(input[1]);
+                System.out.println(user + "\nFibonacci: " + fibonacci(number) + "\nPrime factors: " + primeFactor(number));
+    
+                long endtime = System.nanoTime();
+                long latency = endtime - startTime;
+    
+                // Guardar la latencia y calcular jitter
+                if (!latencyList.isEmpty()) {
+                    long previousLatency = latencyList.get(latencyList.size() - 1);
+                    long jitter = Math.abs(latency - previousLatency);
+                    jitterList.add(jitter);
+                }
+    
+                latencyList.add(latency);
+                processedRequestCount.incrementAndGet();
+    
+                long quantityOfRequestServer = processedRequestCount.get() + failedRequestCount.get();
+                System.out.println("Latency process: " + latency);
+                System.out.println();
+    
+                // Usar callback cuando esté la respuesta
+                callback.reportResponse(new Response(0, "Server response: " + s, quantityOfRequestServer));
+                return;
             }
-
-            latencyList.add(latency);
-         
-            processedRequestCount.incrementAndGet();
-
-            //Pruebas
-            //System.out.println("procesadas server: "+processedRequestCount.get());
-
-            //System.out.println("No procesadas: "+failedRequestCount.get());
-
-
-            //
-
-
-            long quantityOfRequestServer=processedRequestCount.get()+failedRequestCount.get();
-
-            System.out.println("Latency process: "+latency);
-            System.out.println();
-            
-
-            
-            //Usar callbck cuando este la respuesta
-            callback.reportResponse(new Response(0, "Server response: " + s,quantityOfRequestServer));
-
-            return;
-
-
-           
-
-        }catch(NumberFormatException e){
-
-            // Incrementar el contador de solicitudes fallidas
+        } catch (NumberFormatException e) {
             failedRequestCount.incrementAndGet();
             System.out.println("Error: " + e.getMessage());
-
         }
+    
+        if (s.contains("list clients")) {
+            System.out.println("List of connected users: funcionalidad nueva");
 
-        System.out.println(user);
-        if (input[1].contains("listifs")){
+            System.out.println("los clientes son:");
+        
+            for (String client : userList) {
+
+                System.out.println("cliente tal:");
+                System.out.println(client);
+            }
+        } else if (input[1].contains("listifs")) {
             printNetworkInterfaces();
-        }else if (input[1].contains("listports")){
+        } else if (input[1].contains("listports")) {
             runNmapOnIp(input[1]);
-        }else if (input[1].contains("!")){
+        } else if (input[1].contains("!")) {
             executeCommand(input[1]);
         }
-
-        long endtime=System.nanoTime();
-        long latency= endtime-startTime;
-
-
-           // Guardar la latencia y calcular jitter
-           if (!latencyList.isEmpty()) {
+    
+        long endtime = System.nanoTime();
+        long latency = endtime - startTime;
+    
+        if (!latencyList.isEmpty()) {
             long previousLatency = latencyList.get(latencyList.size() - 1);
             long jitter = Math.abs(latency - previousLatency);
             jitterList.add(jitter);
         }
-
+    
         latencyList.add(latency);
-        //processedRequestCount.incrementAndGet();
-
-
-        long quantityOfRequestServer=processedRequestCount.get()+failedRequestCount.get();
-
-        System.out.println("Latency process: "+latency);
-      
-        callback.reportResponse(new Response(0, "Server response: " + s,quantityOfRequestServer));
-
+    
+        long quantityOfRequestServer = processedRequestCount.get() + failedRequestCount.get();
+    
+        System.out.println("Latency process: " + latency);
+    
+        callback.reportResponse(new Response(0, "Server response: " + s, quantityOfRequestServer));
+    
         return;
     }
+    
 
 
 
@@ -343,7 +338,9 @@ public class PrinterI implements Demo.Printer
 
 
 
-
+    public static ArrayList<String> getUserList() {
+        return userList;
+    }
 
 
    

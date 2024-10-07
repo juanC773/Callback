@@ -25,6 +25,7 @@ public class Server
             com.zeroc.Ice.Object object = new PrinterI();
             adapter.add(object, com.zeroc.Ice.Util.stringToIdentity("SimplePrinter"));
             adapter.activate();
+
             
 
               // Iniciar monitorización de through

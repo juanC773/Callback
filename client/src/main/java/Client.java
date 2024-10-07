@@ -34,7 +34,7 @@ public class Client {
                     .checkedCast(communicator.propertyToProxy("Printer.Proxy"));
 
 
-                ObjectAdapter adapter = communicator.createObjectAdapter("Callback");
+                ObjectAdapter adapter = communicator.createObjectAdapter("callback");
                 Demo.Callback callback = new MyCallback();
 
                 ObjectPrx prx = adapter.add(callback, Util.stringToIdentity("callback"));
@@ -65,6 +65,7 @@ public class Client {
                     + "\n-La palabra listifs para ver las interfaces logicas del server"
                     + "\n-La palabra listports junto con una direccion ip para ver los servicios y los puertos en los que se ofrecen estos servicios en la ip dada. Ejemplo de cadena listports192.158.1.38"
                     + "\n-El caracter ! junto con un comando para ver el resultado de correr ese comando en el server. Ejemplo de string !comando"
+                    + "\n-Escribe la palabra list clients para ver la lista de clientes registrados"
                     + "\n-Exit para cerrar el programa");
 
             while (execute) {
