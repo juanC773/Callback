@@ -1,11 +1,11 @@
 <state>
-  <timestamp value='1726459971478' />
+  <timestamp value='1728279904614' />
   <sourceSet name='default'>
-    <source name='C:\Users\Admin\Desktop\Universidad\Sexto semestre\Arqui soft\Hellow-world-_-SA\Printer.ice'>
-      <file name='C:\Users\Admin\Desktop\Universidad\Sexto semestre\Arqui soft\Hellow-world-_-SA\client\build\generated-src\Demo\Response.java' />
-      <file name='C:\Users\Admin\Desktop\Universidad\Sexto semestre\Arqui soft\Hellow-world-_-SA\client\build\generated-src\Demo\Printer.java' />
-      <file name='C:\Users\Admin\Desktop\Universidad\Sexto semestre\Arqui soft\Hellow-world-_-SA\client\build\generated-src\Demo\PrinterPrx.java' />
-      <file name='C:\Users\Admin\Desktop\Universidad\Sexto semestre\Arqui soft\Hellow-world-_-SA\client\build\generated-src\Demo\_PrinterPrxI.java' />
+    <source name='C:\Users\Admin\Desktop\Universidad\Sexto semestre\Arqui soft\Callback\Printer.ice'>
+      <file name='C:\Users\Admin\Desktop\Universidad\Sexto semestre\Arqui soft\Callback\client\build\generated-src\Demo\Response.java' />
+      <file name='C:\Users\Admin\Desktop\Universidad\Sexto semestre\Arqui soft\Callback\client\build\generated-src\Demo\Printer.java' />
+      <file name='C:\Users\Admin\Desktop\Universidad\Sexto semestre\Arqui soft\Callback\client\build\generated-src\Demo\PrinterPrx.java' />
+      <file name='C:\Users\Admin\Desktop\Universidad\Sexto semestre\Arqui soft\Callback\client\build\generated-src\Demo\_PrinterPrxI.java' />
     </source>
     <arg value='C:\Program Files\ZeroC\Ice-3.7.10\\bin\slice2java.exe' />
     <arg value='-IC:\Program Files\ZeroC\Ice-3.7.10\\slice' />
