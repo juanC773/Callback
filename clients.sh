@@ -1,32 +1,30 @@
 #!/bin/bash
 
-# Define el número de clientes a ejecutar en paralelo
-num_clients=50
+# Número de clientes a ejecutar
+NUM_CLIENTES=10
 
-# Número grande que será enviado a cada cliente para calcular Fibonacci
-large_number=45
+# Archivo para registrar los resultados
+RESULT_FILE="C:/Users/Admin/Videos/arquibash/client_results.txt"
+echo "Resultados de concurrencia:" > "$RESULT_FILE"
 
-# Archivo de salida para los resultados
-output_file="C:/Users/Admin/Videos/arquibash/client_results.txt"
+# Rutas a los directorios de código fuente y clases compiladas
+SRC_DIR="C:/Users/Admin/Desktop/Universidad/Sexto semestre/Arqui soft/Callback/client/src/main/java"
+BIN_DIR="C:/Users/Admin/Desktop/Universidad/Sexto semestre/Arqui soft/Callback/client/bin/main"
 
-# Limpiar el archivo de salida anterior
-> "$output_file"
+# Compilar el código Java
+javac -d "$BIN_DIR" "$SRC_DIR/Client.java"
 
-# Función para ejecutar el cliente y redirigir su salida
+# Función que lanza un cliente
 run_client() {
-    java -cp "C:/Users/Admin/Desktop/Universidad/Sexto semestre/Arqui soft/Callback/client/bin/main" Client "$1" >> "$output_file"
+  java -cp "$BIN_DIR" Client "$1" >> "$RESULT_FILE"
 }
 
-
-
-
-# Correr los clientes en paralelo
-for ((i=1; i<=num_clients; i++)); do
-    echo "Ejecutando cliente $i"
-    run_client $large_number &
+# Lanza múltiples clientes en paralelo
+for ((i = 1; i <= NUM_CLIENTES; i++)); do
+  run_client "$i" &
 done
 
-# Esperar a que todos los clientes terminen
+# Esperar a que terminen todos los clientes
 wait
 
-echo "Todos los clientes han terminado. Revisa el archivo $output_file para los resultados."
+echo "Ejecución finalizada. Resultados en $RESULT_FILE"

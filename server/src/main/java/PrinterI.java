@@ -1,3 +1,4 @@
+import Demo.CallbackPrx;
 import Demo.Response;
 import java.util.ArrayList;
 import java.net.NetworkInterface;
@@ -7,8 +8,11 @@ import java.util.Enumeration;
 import java.util.concurrent.atomic.AtomicLong;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.zeroc.Ice.Current;
 
 public class PrinterI implements Demo.Printer
 {
@@ -121,6 +125,12 @@ public class PrinterI implements Demo.Printer
         System.out.println("Latency process: "+latency);
         return new Response(0, "Server response: " + s,quantityOfRequestServer);
     }
+
+
+
+
+
+
 
     private int fibonacci(int n){
         if (fib.isEmpty()){
@@ -319,6 +329,32 @@ public class PrinterI implements Demo.Printer
 
     public static void ProcessedRequestCount() {
         processedRequestCount.set(0);
+    }
+
+
+
+
+
+
+
+    @Override
+    public void fact(long n, CallbackPrx callback, Current current) {
+    
+         Thread thread = new Thread(() -> {
+            BigInteger fact = BigInteger.ONE;
+            for (long i = 1; i <= n; i++) {
+                fact = fact.multiply(BigInteger.valueOf(i));
+            }
+            try {
+                Thread.sleep(3000);
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+            String response = "Factorial of " + n + " is: " + fact;
+            callback.reportResponse(response);
+        });
+        thread.start();
+
     }
 
 

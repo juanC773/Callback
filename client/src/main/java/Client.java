@@ -3,6 +3,11 @@
 import Demo.Response;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicLong;
+
+import com.zeroc.Ice.ObjectAdapter;
+import com.zeroc.Ice.ObjectPrx;
+import com.zeroc.Ice.Util;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -28,9 +33,27 @@ public class Client {
             Demo.PrinterPrx service = Demo.PrinterPrx
                     .checkedCast(communicator.propertyToProxy("Printer.Proxy"));
 
+
+                ObjectAdapter adapter = communicator.createObjectAdapter("Callback");
+                Demo.Callback callback = new MyCallback();
+
+                ObjectPrx prx = adapter.add(callback, Util.stringToIdentity("callback"));
+                Demo.CallbackPrx callbackPrx = Demo.CallbackPrx.checkedCast(prx);
+                adapter.activate();
+
+                
+
+
+
             if (service == null) {
                 throw new Error("Invalid proxy");
             }
+
+
+
+            
+
+
 
             String message;
             boolean execute = true;
@@ -53,8 +76,17 @@ public class Client {
                 // Incrementar el contador de solicitudes enviadas
                 sentRequestCount.incrementAndGet();
 
-                // Enviar solicitud y recibir respuesta
+                
+                
+
+                service.fact(20, callbackPrx);
+
+                
+                
+
+                 //Enviar solicitud y recibir respuesta
                 response = service.printString(user + message);
+                
 
 
                 // Imprimir respuesta del servidor
@@ -67,11 +99,6 @@ public class Client {
                 long sentRequests = sentRequestCount.get();
                 long missedRequestww = sentRequests - quantityOfRequestServer;
                 
-                //Pruebas:
-               // System.out.println("cantidad del server:"+quantityOfRequestServer);
-               // System.out.println("enviadas del cliente:"+sentRequests);
-               // System.out.println("------Miss rate:------");
-                //System.out.println("perdidas:"+missedRequestww);
                 
 
                 missedRequest.set(missedRequestww);
