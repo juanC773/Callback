@@ -35,7 +35,7 @@ public class PrinterI implements Demo.Printer
 
 
 
-    public Response printString(String s, CallbackPrx callback,com.zeroc.Ice.Current current)
+    public void printString(String s, CallbackPrx callback,com.zeroc.Ice.Current current)
     {
         long startTime=System.nanoTime();
 
@@ -83,7 +83,9 @@ public class PrinterI implements Demo.Printer
 
             System.out.println("Latency process: "+latency);
             System.out.println();
-            return new Response(0, "Server response: " + s,quantityOfRequestServer);
+            
+            //Usar callbck cuando este la respuesta
+            callback.reportResponse(new Response(0, "Server response: " + s,quantityOfRequestServer));
 
             
 
@@ -125,7 +127,7 @@ public class PrinterI implements Demo.Printer
         long quantityOfRequestServer=processedRequestCount.get()+failedRequestCount.get();
 
         System.out.println("Latency process: "+latency);
-        return new Response(0, "Server response: " + s,quantityOfRequestServer);
+        callback.reportResponse(new Response(0, "Server response: " + s,quantityOfRequestServer));
     }
 
 
@@ -339,28 +341,7 @@ public class PrinterI implements Demo.Printer
 
 
 
-    @Override
-    public void fact(long n, CallbackPrx callback, Current current){
-
-    //Probar que los hilos estan funcionando
-    // System.out.println("Processing factorial for " + n + " on thread " + Thread.currentThread().getId());
-
-        BigInteger fact = BigInteger.ONE;
-        for (long i = 1; i <= n; i++) {
-            fact = fact.multiply(BigInteger.valueOf(i));
-        }
-    
-        try {
-            // Simula un tiempo de procesamiento largo
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    
-        String response = "Factorial of " + n + " is: " + fact;
-        Response response2=new Response(0,response,0); 
-        callback.reportResponse(response2);
-    }
+   
     
 
 

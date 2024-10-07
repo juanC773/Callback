@@ -79,29 +79,25 @@ public class Client {
                 
                 
 
-                service.fact(20, callbackPrx);
-
+                
                 
                 
 
                  //Enviar solicitud y recibir respuesta
-                response = service.printString(user + message,callbackPrx);
+                service.printString(user + message,callbackPrx);
                 
 
 
-                // Imprimir respuesta del servidor
-                System.out.println("------------Solicitud-------------");
-                System.out.println("Respuesta del server: " + response.value);
-                System.out.println();
+               
 
-                // Calcular y mostrar la diferencia entre solicitudes enviadas y atendidas
-                long quantityOfRequestServer = response.quantityOfRequestServer;
-                long sentRequests = sentRequestCount.get();
-                long missedRequestww = sentRequests - quantityOfRequestServer;
+                 //Calcular y mostrar la diferencia entre solicitudes enviadas y atendidas
+                //long quantityOfRequestServer = response.quantityOfRequestServer;
+                //long sentRequests = sentRequestCount.get();
+                //long missedRequestww = sentRequests - quantityOfRequestServer;
                 
                 
 
-                missedRequest.set(missedRequestww);
+              //  missedRequest.set(missedRequestww);
 
              
             }

@@ -12,9 +12,9 @@ module Demo
 
     interface Printer
     {
-        Response printString(string s, Callback* callback);
+        void printString(string s, Callback* callback);
 
-        void fact(long n, Callback* callback);
+        
     }
 }
 
