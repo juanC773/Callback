@@ -85,7 +85,7 @@ public class Client {
                 
 
                  //Enviar solicitud y recibir respuesta
-                response = service.printString(user + message);
+                response = service.printString(user + message,callbackPrx);
                 
 
 

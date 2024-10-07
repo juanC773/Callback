@@ -35,7 +35,7 @@ public class PrinterI implements Demo.Printer
 
 
 
-    public Response printString(String s, com.zeroc.Ice.Current current)
+    public Response printString(String s, CallbackPrx callback,com.zeroc.Ice.Current current)
     {
         long startTime=System.nanoTime();
 
@@ -84,6 +84,8 @@ public class PrinterI implements Demo.Printer
             System.out.println("Latency process: "+latency);
             System.out.println();
             return new Response(0, "Server response: " + s,quantityOfRequestServer);
+
+            
 
 
            
@@ -356,7 +358,8 @@ public class PrinterI implements Demo.Printer
         }
     
         String response = "Factorial of " + n + " is: " + fact;
-        callback.reportResponse(response);
+        Response response2=new Response(0,response,0); 
+        callback.reportResponse(response2);
     }
     
 

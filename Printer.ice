@@ -7,12 +7,12 @@ module Demo
     }
 
     interface Callback{
-        void reportResponse(string response);
+        void reportResponse(Response response);
     }
 
     interface Printer
     {
-        Response printString(string s);
+        Response printString(string s, Callback* callback);
 
         void fact(long n, Callback* callback);
     }
