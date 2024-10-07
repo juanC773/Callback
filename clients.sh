@@ -13,8 +13,10 @@ output_file="C:/Users/Admin/Videos/arquibash/client_results.txt"
 > "$output_file"
 
 # Función para ejecutar el cliente y redirigir su salida
+echo "Ejecutando cliente $1"
+
 run_client() {
-    java -cp "C:/Users/Admin/Desktop/Universidad/Sexto semestre/Arqui soft/Callback/client/bin/main" Client "$1" >> "$output_file"
+    java -jar "C:/Users/Admin/Desktop/Universidad/Sexto semestre/Arqui soft/Callback/client/build/libs/client.jar" >> "$output_file"
 }
 
 
