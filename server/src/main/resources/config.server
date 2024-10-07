@@ -11,3 +11,4 @@ Printer.Endpoints=tcp -p 9099
 #
 Ice.Default.Host=localhost
 
+Ice.ThreadPool.Server.Size=10

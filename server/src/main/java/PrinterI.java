@@ -338,24 +338,27 @@ public class PrinterI implements Demo.Printer
 
 
     @Override
-    public void fact(long n, CallbackPrx callback, Current current) {
-    
-         Thread thread = new Thread(() -> {
-            BigInteger fact = BigInteger.ONE;
-            for (long i = 1; i <= n; i++) {
-                fact = fact.multiply(BigInteger.valueOf(i));
-            }
-            try {
-                Thread.sleep(3000);
-            } catch (Exception e) {
-                // TODO: handle exception
-            }
-            String response = "Factorial of " + n + " is: " + fact;
-            callback.reportResponse(response);
-        });
-        thread.start();
+    public void fact(long n, CallbackPrx callback, Current current){
 
+    //Probar que los hilos estan funcionando
+    // System.out.println("Processing factorial for " + n + " on thread " + Thread.currentThread().getId());
+
+        BigInteger fact = BigInteger.ONE;
+        for (long i = 1; i <= n; i++) {
+            fact = fact.multiply(BigInteger.valueOf(i));
+        }
+    
+        try {
+            // Simula un tiempo de procesamiento largo
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    
+        String response = "Factorial of " + n + " is: " + fact;
+        callback.reportResponse(response);
     }
+    
 
 
 }
