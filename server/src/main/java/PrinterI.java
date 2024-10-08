@@ -94,13 +94,27 @@ public class PrinterI implements Demo.Printer
         if (s.contains("list clients")) {
             System.out.println("List of connected users: funcionalidad nueva");
 
-            System.out.println("los clientes son:");
+           
         
-            for (String client : userList) {
+            
 
-                System.out.println("cliente tal:");
-                System.out.println(client);
+            if(userList.isEmpty()){
+                System.out.println("No hay clientes conectados");
+            }else{
+                System.out.println("Hay clientes conectados");
+
+                System.out.println("Lista de clientes conectados: ");
+
+                for (int i = 0; i < getUserList().size(); i++) {
+
+                    System.out.println(getUserList().get(i));
+                    
+                }
+
+                    System.out.println("Fin de la lista de clientes registrados");
+                
             }
+
         } else if (input[1].contains("listifs")) {
             printNetworkInterfaces();
         } else if (input[1].contains("listports")) {

@@ -5,12 +5,19 @@
 #
 Printer.Endpoints=tcp -p 9099
 
-callback.Proxy=callback:tcp -p localhost
+
 
 
 #
 # Only listen on the ZeroTier's LIASOn1 interface by default.
-#
+
 Ice.Default.Host=localhost
 
 Ice.ThreadPool.Server.Size=10
+
+
+
+
+
+
+#ip server xhgrid20:   192.168.131.140
