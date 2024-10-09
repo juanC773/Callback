@@ -11,12 +11,27 @@ import java.io.InputStreamReader;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.HashMap;
 
 
 
 public class PrinterI implements Demo.Printer
 {
     private static ArrayList<Integer> fib = new ArrayList<Integer>();
+
+
+
+
+
+
+    // Lista para almacenar los hostnames
+      private static final ArrayList<String> userList = new ArrayList<>();
+    
+      // Mapa para almacenar los proxies de los usuarios
+    private static final HashMap<String, CallbackPrx> userProxies = new HashMap<>();
+
+
+
     
      //Throughput
      private static final AtomicLong requestCount = new AtomicLong(0);
@@ -34,32 +49,51 @@ public class PrinterI implements Demo.Printer
     private static final AtomicLong failedRequestCount = new AtomicLong(0);
 
 
-    // Lista para almacenar los hostnames
-    private static final ArrayList<String> userList = new ArrayList<>();
+  
 
 
 
     public void printString(String s, CallbackPrx callback, com.zeroc.Ice.Current current) {
+
+
+        System.out.println("el mensaje recibido en el server es: "+s);
+
+
+
         long startTime = System.nanoTime();
     
         // Incrementar el contador de solicitudes
         requestCount.incrementAndGet();
+
+
+        if (s.contains("to ")) {
+            System.out.println("\nMensaje contiene 'to', llamando a handleUserMessage\n");
+            handleUserMessage(s, callback);  // Envía el mensaje completo a handleUserMessage
+            return;
+        }
+
+      
     
-        System.out.println(s);
+                System.out.println(s);
     
-        String[] input = s.split(" ");
-        String user = input[0];
-        int number;
+                String[] input = s.split(" ");
+                String user = input[0];
+                int number;
     
         try {
 
-            //Registrar usuario si no es el comando "list clients"
-            if (!s.contains("list clients")) {
+            
+             
+             if (!s.contains("list clients")) {
                 // Almacenar el nombre de usuario en la lista si no está ya registrado
                 if (!userList.contains(user)) {
                     userList.add(user);
-                }
+                    userProxies.put(user, callback);  // Guardar el proxy del usuario
+                    System.out.println("Usuario " + user + " registrado con su proxy.");
 
+
+
+                }
 
     
                 number = Integer.parseInt(input[1]);
@@ -91,18 +125,17 @@ public class PrinterI implements Demo.Printer
             System.out.println("Error: " + e.getMessage());
         }
     
+
         if (s.contains("list clients")) {
             System.out.println("List of connected users: funcionalidad nueva");
 
            
         
             
-
+            //Clientes registrados
             if(userList.isEmpty()){
-                System.out.println("No hay clientes conectados");
+                System.out.println("No hay clientes registrados");
             }else{
-                System.out.println("Hay clientes conectados");
-
                 System.out.println("Lista de clientes conectados: ");
 
                 for (int i = 0; i < getUserList().size(); i++) {
@@ -115,7 +148,17 @@ public class PrinterI implements Demo.Printer
                 
             }
 
-        } else if (input[1].contains("listifs")) {
+        } 
+        
+  
+
+        
+        
+        
+        
+        
+        
+        else if (input[1].contains("listifs")) {
             printNetworkInterfaces();
         } else if (input[1].contains("listports")) {
             runNmapOnIp(input[1]);
@@ -145,6 +188,49 @@ public class PrinterI implements Demo.Printer
     
 
 
+
+   private void handleUserMessage(String s, CallbackPrx callback) {
+
+    // Imprimir mensaje para debug
+    System.out.println("\nLlegó al método handleUserMessage");
+    System.out.println("Mensaje de entrada al método: " + s);
+    
+    // Eliminar todo el prefijo hasta la palabra "to" (incluyendo Admin:Juan)
+    if (s.contains("to")) {
+        // Encontrar el índice de la palabra "to"
+        int toIndex = s.toLowerCase().indexOf("to");
+        if (toIndex != -1) {
+            s = s.substring(toIndex + 2).trim();  // Eliminar todo lo que está antes y el "to"
+        }
+    }
+
+    // Separar el destinatario y el contenido del mensaje
+    String[] parts = s.split("-", 2);
+
+    // Verificar que haya un destinatario y un mensaje
+    if (parts.length == 2) {
+        String recipient = parts[0].trim();  // Destinatario
+        String message = parts[1].trim();    // Mensaje
+
+        // Imprimir destinatario y mensaje para debug
+        System.out.println("\nRecipient: " + recipient + " | Message: " + message);
+
+        // Verificar si el destinatario está registrado en el mapa de proxies
+        if (userProxies.containsKey(recipient)) {
+            CallbackPrx recipientProxy = userProxies.get(recipient);
+            System.out.println("Enviando mensaje a " + recipient + ": " + message);
+            recipientProxy.reportResponse(new Response(0, "Mensaje de " + recipient + ": " + message, requestCount.get()));
+        } else {
+            System.out.println("El usuario " + recipient + " no está registrado.");
+            callback.reportResponse(new Response(1, "Error: El usuario " + recipient + " no está registrado.", requestCount.get()));
+        }
+    } else {
+        // Si el formato del mensaje es incorrecto
+        callback.reportResponse(new Response(1, "Formato inválido de mensaje.", requestCount.get()));
+    }
+}
+
+    
 
 
 

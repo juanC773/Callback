@@ -1,5 +1,4 @@
 
-
 import Demo.Response;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicLong;
@@ -16,7 +15,6 @@ public class Client {
     // Contador de solicitudes enviadas
     private static final AtomicLong sentRequestCount = new AtomicLong(0);
 
-
     // Contador de solicitudes perdidas
     private static final AtomicLong missedRequest = new AtomicLong(0);
 
@@ -24,8 +22,8 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         java.util.List<String> extraArgs = new java.util.ArrayList<>();
 
-           // Iniciar el monitor
-           MonitorClient.startMonitoring();
+        // Iniciar el monitor
+        MonitorClient.startMonitoring();
 
         try (com.zeroc.Ice.Communicator communicator = com.zeroc.Ice.Util.initialize(args, "config.client",
                 extraArgs)) {
@@ -33,27 +31,16 @@ public class Client {
             Demo.PrinterPrx service = Demo.PrinterPrx
                     .checkedCast(communicator.propertyToProxy("Printer.Proxy"));
 
+            ObjectAdapter adapter = communicator.createObjectAdapter("callback");
+            Demo.Callback callback = new MyCallback();
 
-                ObjectAdapter adapter = communicator.createObjectAdapter("callback");
-                Demo.Callback callback = new MyCallback();
-
-                ObjectPrx prx = adapter.add(callback, Util.stringToIdentity("callback"));
-                Demo.CallbackPrx callbackPrx = Demo.CallbackPrx.checkedCast(prx);
-                adapter.activate();
-
-                
-
-
+            ObjectPrx prx = adapter.add(callback, Util.stringToIdentity("callback"));
+            Demo.CallbackPrx callbackPrx = Demo.CallbackPrx.checkedCast(prx);
+            adapter.activate();
 
             if (service == null) {
                 throw new Error("Invalid proxy");
             }
-
-
-
-            
-
-
 
             String message;
             boolean execute = true;
@@ -77,34 +64,23 @@ public class Client {
                 // Incrementar el contador de solicitudes enviadas
                 sentRequestCount.incrementAndGet();
 
-                
-                
-
-                
-                
-                
-
-                 //Enviar solicitud y recibir respuesta
-                service.printString(user + message,callbackPrx);
-                
+                // Enviar solicitud y recibir respuesta
+                service.printString(user + message, callbackPrx);
 
                 MyCallback myCallback = new MyCallback();
 
-                
-                Response response2= myCallback.getActualResponse();
-               
-                if(response2!=null){
-                    
-                 //Calcular y mostrar la diferencia entre solicitudes enviadas y atendidas
-                long quantityOfRequestServer = response2.quantityOfRequestServer;
-                long sentRequests = sentRequestCount.get();
-                long missedRequestww = sentRequests - quantityOfRequestServer;
-                
-                
+                Response response2 = myCallback.getActualResponse();
 
-                 missedRequest.set(missedRequestww);
-                }    
-             
+                if (response2 != null) {
+
+                    // Calcular y mostrar la diferencia entre solicitudes enviadas y atendidas
+                    long quantityOfRequestServer = response2.quantityOfRequestServer;
+                    long sentRequests = sentRequestCount.get();
+                    long missedRequestww = sentRequests - quantityOfRequestServer;
+
+                    missedRequest.set(missedRequestww);
+                }
+
             }
         }
     }
@@ -123,19 +99,14 @@ public class Client {
         }
     }
 
-
-
-    public static long getMissedRequest(){
+    public static long getMissedRequest() {
 
         return missedRequest.get();
 
     }
 
-
     public static void resetMissRequest() {
         missedRequest.set(0);
     }
-
-
 
 }
