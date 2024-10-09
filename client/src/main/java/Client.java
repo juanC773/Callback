@@ -23,7 +23,7 @@ public class Client {
         java.util.List<String> extraArgs = new java.util.ArrayList<>();
 
         // Iniciar el monitor
-        MonitorClient.startMonitoring();
+       // MonitorClient.startMonitoring();
 
         try (com.zeroc.Ice.Communicator communicator = com.zeroc.Ice.Util.initialize(args, "config.client",
                 extraArgs)) {
@@ -53,6 +53,8 @@ public class Client {
                     + "\n-La palabra listports junto con una direccion ip para ver los servicios y los puertos en los que se ofrecen estos servicios en la ip dada. Ejemplo de cadena listports192.158.1.38"
                     + "\n-El caracter ! junto con un comando para ver el resultado de correr ese comando en el server. Ejemplo de string !comando"
                     + "\n-Escribe la palabra list clients para ver la lista de clientes registrados"
+                    + "\n-Enviar un mensaje a otro usuario, ejemplo : 'to username-  mensaje para enviar'"
+                    + "\n-Enviar un mensaje a todos, ejemplo : 'BC mensaje para enviar'"
                     + "\n-Exit para cerrar el programa");
 
             while (execute) {
