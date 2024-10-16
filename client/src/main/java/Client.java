@@ -85,7 +85,7 @@ public class Client {
                     }
                 }, executorService);
 
-                System.out.println("Request sent. You can continue entering commands.");
+                System.out.println("Solicitud enviada. Puedes seguir enviando solicitudes.");
             }
         } 
     }
