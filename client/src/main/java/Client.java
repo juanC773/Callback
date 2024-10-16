@@ -1,6 +1,9 @@
 
 import Demo.Response;
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.zeroc.Ice.ObjectAdapter;
@@ -17,6 +20,10 @@ public class Client {
 
     // Contador de solicitudes perdidas
     private static final AtomicLong missedRequest = new AtomicLong(0);
+
+
+    private static final ExecutorService executorService = Executors.newFixedThreadPool(10);
+
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -42,7 +49,7 @@ public class Client {
                 throw new Error("Invalid proxy");
             }
 
-            String message;
+            //String message;
             boolean execute = true;
             String user = getUserHostString();
 
@@ -57,19 +64,41 @@ public class Client {
                     + "\n-Enviar un mensaje a todos, ejemplo : 'BC mensaje para enviar'"
                     + "\n-Exit para cerrar el programa");
 
-            while (execute) {
-                message = scanner.nextLine();
+           
+
+
+
+            while (execute) {while (true) {
+                String message = scanner.nextLine();
                 if (message.equalsIgnoreCase("exit")) {
-                    return;
+                    break;
                 }
 
-                // Incrementar el contador de solicitudes enviadas
                 sentRequestCount.incrementAndGet();
+                
+                // Send the request asynchronously
+                CompletableFuture.runAsync(() -> {
+                    try {
+                        service.printString(user + message, callbackPrx);
+                    } catch (Exception e) {
+                        System.err.println("Error sending request: " + e.getMessage());
+                    }
+                }, executorService);
 
-                // Enviar solicitud y recibir respuesta
-                service.printString(user + message, callbackPrx);
+                System.out.println("Request sent. You can continue entering commands.");
+            }
+        } 
+    }
 
-                MyCallback myCallback = new MyCallback();
+
+
+
+                
+                
+
+                
+                /*
+                 MyCallback myCallback = new MyCallback();
 
                 Response response2 = myCallback.getActualResponse();
 
@@ -82,10 +111,21 @@ public class Client {
 
                     missedRequest.set(missedRequestww);
                 }
+                 */
+               
 
-            }
+           
         }
-    }
+    
+
+
+
+
+
+
+
+
+
 
     private static String getUserHostString() {
         String username = System.getProperty("user.name");
@@ -112,3 +152,5 @@ public class Client {
     }
 
 }
+
+
