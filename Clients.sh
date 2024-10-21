@@ -4,15 +4,17 @@ hosts=("xhgrid1" "xhgrid2" "xhgrid3" "xhgrid4" "xhgrid5" "xhgrid6" "xhgrid7" "xh
 
 
 for host in "${hosts[@]}"; do
-  scp -o StrictHostKeyChecking=no -r . swarch@xhgrid2:~/home
+  scp -o StrictHostKeyChecking=no -r . swarch@xhgrid2:~/Callback
   swarch
   ssh swarch@xhgrid2
   swarch
   cd Callback
   chhmod +x gradlew
+  ./gradlew build
   cd ./client/build/libs
-  unzip Client.jar
-  rm Client.jar
+  mkdir client
+  unzip client.jar -d ./client
+  rm client.jar
   cd Client
   "vim"
   zip
