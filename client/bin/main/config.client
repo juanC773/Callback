@@ -2,7 +2,9 @@
 # The client reads this property to create the reference to the
 # "hello" object in the server.
 #
-Printer.Proxy=SimplePrinter:tcp -p 9099
+Printer.Proxy=SimplePrinter:tcp -p 9099 -h localhost
+
+callback.Endpoints = tcp -h localhost
 
 #
 # Uncomment to use the WebSocket transports instead.
@@ -13,3 +15,9 @@ Printer.Proxy=SimplePrinter:tcp -p 9099
 # Only listen on the ZeroTier's LIASOn1 interface by default.
 #
 Ice.Default.Host=localhost
+
+
+
+
+
+#ip del usuario xhgrid 18:  192.168.131.138
