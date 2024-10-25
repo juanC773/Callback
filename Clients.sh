@@ -1,7 +1,6 @@
 #!/bin/bash
 
-hosts=("hgrid1" "hgrid2" "xhgrid3" "xhgrid4" "xhgrid5" "xhgrid6" "xhgrid7" "xhgrid8" "xhgrid9" "xhgrid10" "xhgrid11" "xhgrid12" "xhgrid13" "xhgrid14" "xhgrid15")
-
+hosts=("hgrid1" "hgrid2" "hgrid3" "hgrid4" "hgrid5" "hgrid6" "hgrid7" "hgrid8" "hgrid9" "hgrid10" "hgrid11" "hgrid12" "hgrid13" "hgrid14" "hgrid15")
 
 for host in "${hosts[@]}"; do
   scp -o StrictHostKeyChecking=no -r . "swarch@x$host:~/Callback"
@@ -15,11 +14,17 @@ for host in "${hosts[@]}"; do
   mkdir client
   unzip client.jar -d ./client
   rm client.jar
-  cd Client
-  sed -i 's/localhost/'$host'/g' config.properties
-  jar cvf Client
-  rm -r Client
+  cd client
+  sed -i 's/localhost/'$host'/g' client.config
+  jar cvf client
+  rm -r client
   java -jar Client.jar
-  !1000
+  1000
   
+done
+
+for host in "${hosts[@]}"; do
+  ssh "swarch@x$host" 
+  swarch 
+  rm -r Callback
 done
